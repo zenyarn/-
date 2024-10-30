@@ -3,7 +3,7 @@
 #include <string>
 using namespace std;
 
-int n;
+int n, cnt = 0;
 vector<vector<string>> solutions;
 vector<string> board;
 vector<bool> cols;
@@ -11,26 +11,27 @@ vector<bool> diagonals;
 vector<bool> anti_diagonals;
 
 bool is_safe(int row, int col) {
-    return !(cols[col] || diagonals[row - col] || anti_diagonals[row + col]);
+    return !(cols[col] || diagonals[row - col + (n - 1)] || anti_diagonals[row + col]);
 }
 
 void place_queen(int row, int col) {
     board[row][col] = 'Q';
     cols[col] = true;
-    diagonals[row - col] = true;
+    diagonals[row - col + (n - 1)] = true;
     anti_diagonals[row + col] = true;
 }
 
 void remove_queen(int row, int col) {
     board[row][col] = '.';
     cols[col] = false;
-    diagonals[row - col] = false;
+    diagonals[row - col + (n - 1)] = false;
     anti_diagonals[row + col] = false;
 }
 
 void backtrack(int row) {
     if(row == n) {
         solutions.push_back(board);
+        ++cnt;
         return;
     }
 
@@ -59,6 +60,8 @@ int main() {
         }
         cout << endl; // 每个解之间添加空行以分隔
     }
+
+    cout << "共有 " << cnt << " 种解决方案" << endl;
 
     return 0;
 }
